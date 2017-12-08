@@ -1,6 +1,6 @@
 '''Module to perform basic Banking operations '''
 
-import time,pickle
+import time,pickle,os
 
 path0 = "Data\\"
 
@@ -52,11 +52,65 @@ class Customer :
         print "Date of Birth : " ,self.DOB
         print "Email ID  :  " , self.Email
         print "Phone number :  " , self.Phno
-        print "Credit : ",self.amount        
+        print "Credit : ",self.amount
+
+    def Changepass(self):
+        print "Changing Password. Enter original password: "
+        testpass = raw_input("")
+        if testpass == self.Password :
+            newpass = raw_input("Enter new password : ")
+            confnewpass= raw_input("Confirm the password: " )
+
+            if newpass == confnewpass  :
+                self.Password = newpass
+                print "Password Successfully changed. It is: " , self.Password
+            else :
+                print "Passwords do not match.Try again"
+                self.Changepass()
+    
+    
+
+    def ChangeData(self):
+        print "What do you want to change? "
+        print "0.Exit \n 1.Password \n 2.Address \n 3.DOB \n 4.Email \n 5.Phone number"
+        prompt = int(raw_input("Enter option: " ))
+
+        if prompt == 0 :
+            pass
+
+        elif prompt == 1 :
+            self.Changepass()
+
+        elif prompt == 2 :
+            add= raw_input("Enter new address : ")
+            self.Address = add
+            print "Changed Address is ",self.Address
+        elif prompt == 3 :
+            Db= raw_input("Enter new Date of birth : ")
+            self.DOB = db
+            print "The date of birth has been changed to ",self.DOB
+        elif prompt ==4 :
+            em= raw_input("Enter new Email ID : ")
+            self.Email = em
+            print "The Email ID has been changed to ",self.Email
+        elif prompt == 5:
+            ph= raw_input("Enter new phone number : ")
+            self.phno = ph
+            print "The phone number has been changed to ",self.ph
+        else:
+            print "Provide a valid option "
+
+    def update(self):
+        path = "Data\\"
+        
+        Foo = file(path+self.Name,'wb')
+        pickle.dump(self,Foo)
+        Foo.close()
+        
         
 #contains mostly static methods        
 class Bank :
-    txt  = "Banking Operations  \n  1.View Details \n  2.Withdraw \n 3.Deposit \n 4.Exit "
+    txt  = "Banking Operations  \n 1.View Details \n 2.Withdraw \n 3.Deposit \n 4.View Amount \n 5.Change Credentials \n 6.Save and Exit"
     prompt1 = "Enter Amount to be Withdrawn : "
     prompt2 = "Enter Amount to be Deposited : "
 
@@ -68,8 +122,7 @@ class Bank :
             print Bank.txt
             prompt = int(raw_input("Enter Option : "))
             if prompt ==1 :
-                instance.ViewData()
-                
+                instance.ViewData()                
             elif prompt == 2 :
                 amt = float(raw_input(Bank.prompt1))
                 instance.Withdraw(amt)
@@ -77,7 +130,13 @@ class Bank :
                 amt1 = float(raw_input(Bank.prompt2))
                 instance.Deposit(amt1)
             elif prompt == 4:
+                print "Available Amount : " , instance.amount
+            elif prompt == 5 :
+                instance.ChangeData()
+            elif prompt == 6:
+                instance.update()
                 break
+                exit()
         
                 
 def LoginPage():
@@ -110,8 +169,8 @@ def SignUp() :
     Data = []
     obj = Customer()
     
-    Username  = raw_input("Enter your Username : ")
-    Password = raw_input("Enter your Password : ")
+    Username  = raw_input("Enter your Username(cannot be changed) : ")
+    Password = raw_input("Enter your Password : ")      
     RePassword = raw_input("Re-Enter your Password : ")
     Address = raw_input("Enter your current address : ")
     DOB = raw_input("Enter Date of Birth (DD/MM/YYYY) : ")
@@ -182,4 +241,4 @@ def SignIn():
 
 x  = Customer()    
 
-        
+            
