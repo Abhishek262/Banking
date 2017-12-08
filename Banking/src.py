@@ -20,7 +20,7 @@ class Customer :
         self.Email = None
         self.Phno = None
         self.info = None
-        self.amt = 0
+        self.amount = 0
     
     def InputData(self,lst) :
         
@@ -29,21 +29,22 @@ class Customer :
         self.Address = lst[2]
         self.DOB = lst[3]
         self.Email = lst[4]
-        self.Phno = lst[5]        
+        self.Phno = lst[5]
+        self.amount = 0
 
     def Withdraw(self,amount):
-        if self.amt  > amount  :
+        if self.amount  >= amount  :
             
-            self.amt = self.amt - amount
+            self.amount = self.amount - amount
 
-            print "Capital left after Withdrawing is - " , self.amt
+            print "Capital left after Withdrawing is - " , self.amount
 
         else  :
             print "Sorry, your account does not have enough credit to withdraw the given amount"
 
     def Deposit(self,amount):
-        self.amt =  self.amt + amount
-        print "Updated amount - " , self.amt
+        self.amount =  self.amount + amount
+        print "Updated amount - " , self.amount
 
     def ViewData(self):
         print "Name :  " , self.Name
@@ -51,28 +52,33 @@ class Customer :
         print "Date of Birth : " ,self.DOB
         print "Email ID  :  " , self.Email
         print "Phone number :  " , self.Phno
-        
+        print "Credit : ",self.amount        
         
 #contains mostly static methods        
 class Bank :
-    def __init__(self):
-        self.txt  = "Banking Operations  \n  1.View Details \n  2.Deposit \n 3.Withdraw "
-        self.prompt1 = "Enter Amount to be Withdrawn : "
-        self.prompt2 = "Enter Amount to be Deposited : "
+    txt  = "Banking Operations  \n  1.View Details \n  2.Withdraw \n 3.Deposit \n 4.Exit "
+    prompt1 = "Enter Amount to be Withdrawn : "
+    prompt2 = "Enter Amount to be Deposited : "
+
 
     @staticmethod
     def menu(instance) :
-        print self.txt
-        prompt = int(raw_input("Enter Option : "))
-        if prompt ==1 :
-            instance.ViewDetails()
-        elif prompt == 2 :
-            amt = float(raw_input(self.prompt1))
-            instance.Withdraw(amt)
-        elif prompt == 3 :
-            amt1 = float(raw_input(self.prompt2))
-            instance.Depsoit(amt1)
-    
+        
+        while True:
+            print Bank.txt
+            prompt = int(raw_input("Enter Option : "))
+            if prompt ==1 :
+                instance.ViewData()
+                
+            elif prompt == 2 :
+                amt = float(raw_input(Bank.prompt1))
+                instance.Withdraw(amt)
+            elif prompt == 3 :
+                amt1 = float(raw_input(Bank.prompt2))
+                instance.Deposit(amt1)
+            elif prompt == 4:
+                break
+        
                 
 def LoginPage():
 
@@ -166,11 +172,14 @@ def SignIn():
     
     time.sleep(1)
 
-    opt = raw_input("Enter 1 to enter menu or 0 to exit")
+    opt = int(raw_input("Enter 1 to enter menu or 0 to exit : "))
     if opt == 1 :
         Bank.menu(custObj)
-    elif opt == 2 :
-        exit
-    
+    elif opt == 0 : 
+        exit()
+    else :
+        print "Invalid option try again "
+
+x  = Customer()    
 
         
