@@ -86,7 +86,7 @@ class Customer :
             self.Address = add
             print "Changed Address is ",self.Address
         elif prompt == 3 :
-            Db= raw_input("Enter new Date of birth : ")
+            db= raw_input("Enter new Date of birth : ")
             self.DOB = db
             print "The date of birth has been changed to ",self.DOB
         elif prompt ==4 :
@@ -95,8 +95,8 @@ class Customer :
             print "The Email ID has been changed to ",self.Email
         elif prompt == 5:
             ph= raw_input("Enter new phone number : ")
-            self.phno = ph
-            print "The phone number has been changed to ",self.ph
+            self.Phno = ph
+            print "The phone number has been changed to ",self.Phno
         else:
             print "Provide a valid option "
 
@@ -110,9 +110,10 @@ class Customer :
         
 #contains mostly static methods        
 class Bank :
-    txt  = "Banking Operations  \n 1.View Details \n 2.Withdraw \n 3.Deposit \n 4.View Amount \n 5.Change Credentials \n 6.Save and Exit"
+    txt  = "Banking Operations  \n 1.View Details \n 2.Withdraw \n 3.Deposit \n 4.View Amount \n 5.Change Credentials \n 6.Transfer Capital \n 7.Save and Exit  "
     prompt1 = "Enter Amount to be Withdrawn : "
     prompt2 = "Enter Amount to be Deposited : "
+    
 
 
     @staticmethod
@@ -134,10 +135,32 @@ class Bank :
             elif prompt == 5 :
                 instance.ChangeData()
             elif prompt == 6:
+                                
+                tcash = float(raw_input("Enter amount to be transferred :"))
+                sname = raw_input("Enter name of the receiver : ")                
+                Bank.TransferCash(instance,sname,tcash)
+                
+            elif prompt == 7:
                 instance.update()
                 break
                 exit()
-        
+
+    @staticmethod
+    def TransferCash(sendobj,name,cash):
+        path = "Data\\"
+
+        recf = open(path + name,'rb')
+        recobj = pickle.load(recf)
+        #transfers capital from one account to another
+        if sendobj.amount >= cash :
+            sendobj.amount = sendobj.amount - cash
+            recobj.amount = recobj.amount + cash 
+            #updates the amount to the respective files
+            sendobj.update()
+            recobj.update()
+
+            print "Amount ",cash," has been transferred from ",sendobj.Name," to ",recobj.Name
+                    
                 
 def LoginPage():
 
