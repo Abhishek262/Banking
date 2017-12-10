@@ -285,8 +285,7 @@ class Bank :
             print "Your monthly installment will be",EMI
             
         instance.EMI = EMI
-        insta
-        nce.job = job
+        instance.job = job
         instance.max_loan_amt = max_loan_amt
         instance.update()
             
