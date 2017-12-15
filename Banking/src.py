@@ -3,6 +3,8 @@
 import time,pickle,os
 
 path0 = "Data\\"
+process = True        
+
 
 
 class Customer :
@@ -143,6 +145,7 @@ class Bank :
             print "  "
             print Bank.txt
             print Bank.txtcont
+
             
             prompt = int(raw_input("Enter Option : "))
             if prompt ==1 :
@@ -176,6 +179,8 @@ class Bank :
                 instance.update()
                 break
                 exit()
+
+            
 
     @staticmethod
     def TransferCash(sendobj,name,cash):
@@ -310,27 +315,41 @@ class Bank :
         instacne.max_loan_amt = max_loan_amt
         instance.update()
         
-                    
-                
-def LoginPage():
+def opt(custObj):
+    option = int(raw_input("Enter 1 to enter menu or 0 to exit : "))
+    if option == 1 :
+        Bank.menu(custObj)
+    elif option == 0 : 
+        exit()
+    else :
+        print "Invalid option try again "
+        opt(custObj)
 
-    print ' Welcome to our Bank - We care '
+        
+def LoginPage():
+    global process
+
+    print 'Welcome to our Bank - We care '
     print '' 
     txt =  '''Select 1 - Existing account,
 Select 2 - Create new account
 Select 3 - Exit : '''
+    try : 
+        x = int(raw_input(txt))
 
-    x = int(raw_input(txt))
-    if x not in range(1,4):
-        print 'Invalid Option '
+        if x == 1 :
+            SignIn()
+        if x == 2 :
+            SignUp()
+        if x == 3 :
+            process = False
+            
+        else:
+            print "Invalid option"
+    except :
+        print "Error - Invalid"
+        
         LoginPage()
-
-    if x == 1 :
-        SignIn()
-    if x == 2 :
-        SignUp()
-    if x == 3 :
-        exit()
 
 def transferData(obj):
     path = 'Data\\' + obj.Name
@@ -338,6 +357,37 @@ def transferData(obj):
     
     pickle.dump(obj,f)
     f.close()
+
+def dateError(date) :
+    #DD/MM/YYYY
+    if date[2] != "/" or date[5] != "/":
+        print "Date not in correct format"
+        SignUp()
+    elif int(date[0:2]) not in range(1,32):
+        print "Wrong Date Type "
+        SignUp()
+    elif int(date[3:5]) not in range(1,13):
+        print "Wrong Date Type"
+        SignUp()
+
+    elif int(date[6:10]) < 2000 and int(date[6:10]) > 1940:
+        print "Age limit -18"
+        SignUp()
+    elif date == " ":
+        print "Date can't be blank"
+        SignUp()
+    else:
+        pass
+    
+def emailError(email) :
+    
+    if '@' not in email :
+        print "Invalid email ID  "
+        SignUp()
+
+    at = email.find('@')
+    
+    
     
 def SignUp() :
     
@@ -346,35 +396,57 @@ def SignUp() :
     obj = Customer()
     
     Username  = raw_input("Enter your Username(cannot be changed) : ")
-    Password = raw_input("Enter your Password : ")      
+    if Username == " ":
+        print "Username can't be blank"
+        SignUp()
+        
+    Password = raw_input("Enter your Password : ")
+    if Password == " ":
+        print "Username can,t be blank"
+        SignUp()
     RePassword = raw_input("Re-Enter your Password : ")
+        
+    if Password != RePassword :
+        print " "
+        print "Passwords do not match "
+        print " "
+        SignUp()
+                
     Address = raw_input("Enter your current address : ")
+    if Address == " ":
+        print "Address can't be blank"
+        SignUp()
+    
     DOB = raw_input("Enter Date of Birth (DD/MM/YYYY) : ")
+    dateError(DOB)
+    
     Email = raw_input("Enter a valid Email ID : ")
+    #email error
     Phno = raw_input("Enter your Phone number : ")
+    
     Age = raw_input("Enter your age : ")
 
-    if Password == RePassword :
-        Data.append(Username)
-        Data.append(Password)
-        Data.append(Address)
-        Data.append(DOB)
-        Data.append(Email)
-        Data.append(Phno)
-        Data.append(Age)
+   
+    Data.append(Username)
+    Data.append(Password)
+    Data.append(Address)
+    Data.append(DOB)
+    Data.append(Email)
+    Data.append(Phno)
+    Data.append(Age)
 
-        obj.InputData(Data)
-        transferData(obj)
-        print ""
+    obj.InputData(Data)
+    transferData(obj)
+    print ""
 
-        print " SignUp complete " 
-        
+    print " SignUp complete " 
     
-    else :
-        print " Passwords do not match \n "
-        Sign_Up()
 
 
+
+#def errorCheck():
+    
+    
 def SignIn():
 
     print "Sign in to your account "
@@ -400,25 +472,20 @@ def SignIn():
             print "Logged in "
             
         else :
-            print " Inavlid Username/Password "
+            print " Invalid Username/Password "
             SignIn()
     
     except :
-        print " Inavlid Username/Password "
+        print " Invalid Username/Password "
         SignIn()
         
 
     
     time.sleep(1)
 
-    opt = int(raw_input("Enter 1 to enter menu or 0 to exit : "))
-    if opt == 1 :
-        Bank.menu(custObj)
-    elif opt == 0 : 
-        exit()
-    else :
-        print "Invalid option try again "
+    opt(custObj)
         
-while True: 
+while process: 
     LoginPage()
+    
             
