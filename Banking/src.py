@@ -316,11 +316,12 @@ class Bank :
         instance.update()
         
 def opt(custObj):
+    global process
     option = int(raw_input("Enter 1 to enter menu or 0 to exit : "))
     if option == 1 :
         Bank.menu(custObj)
-    elif option == 0 : 
-        exit()
+    elif option == 0 :
+        process  =False
     else :
         print "Invalid option try again "
         opt(custObj)
@@ -344,8 +345,7 @@ Select 3 - Exit : '''
         if x == 3 :
             process = False
             
-        else:
-            print "Invalid option"
+
     except :
         print "Error - Invalid"
         
@@ -370,22 +370,50 @@ def dateError(date) :
         print "Wrong Date Type"
         SignUp()
 
-    elif int(date[6:10]) < 2000 and int(date[6:10]) > 1940:
-        print "Age limit -18"
+    elif int(date[6:10]) not in range(1940,2001):
+        print "Not in age limit"
         SignUp()
     elif date == " ":
         print "Date can't be blank"
         SignUp()
     else:
         pass
+
     
 def emailError(email) :
-    
+    #q = ajsdfgasjdf
+    q1 = (email[-4:-1] + email[len(email)-1])
+    q2 =(email[-3:-1] + email[len(email)-1])
     if '@' not in email :
         print "Invalid email ID  "
         SignUp()
 
-    at = email.find('@')
+    elif q1 != ".com" and q2 != ".in" :
+        
+        
+        print "Invalid email ID "
+        SignUp()
+
+   
+    elif len(email) == 0   :
+        print "Invalid email ID "
+        SignUp()
+
+        
+    else :
+        pass
+        
+    
+def phoneError(phone) :
+    for i in phone :
+        if int(i) not in range(0,10):
+            print "Invalid phone number1"
+            SignUp()
+            break
+    if len(phone) != 10:
+        print "Invalid Phone Number len"
+        SignUp()
+
     
     
     
@@ -396,13 +424,13 @@ def SignUp() :
     obj = Customer()
     
     Username  = raw_input("Enter your Username(cannot be changed) : ")
-    if Username == " ":
+    if len(Username) == 0:
         print "Username can't be blank"
         SignUp()
         
     Password = raw_input("Enter your Password : ")
-    if Password == " ":
-        print "Username can,t be blank"
+    if len(Password) == 0:
+        print "Password can't be blank"
         SignUp()
     RePassword = raw_input("Re-Enter your Password : ")
         
@@ -421,10 +449,16 @@ def SignUp() :
     dateError(DOB)
     
     Email = raw_input("Enter a valid Email ID : ")
-    #email error
+    emailError(Email)
     Phno = raw_input("Enter your Phone number : ")
+    phoneError(Phno)
     
+        
     Age = raw_input("Enter your age : ")
+    if int(Age) not in range(18,77):
+        print "Invalid age"
+        SignUp()
+        
 
    
     Data.append(Username)
@@ -484,8 +518,10 @@ def SignIn():
     time.sleep(1)
 
     opt(custObj)
-        
+    
+#main        
 while process: 
     LoginPage()
+    
     
             
