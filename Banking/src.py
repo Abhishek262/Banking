@@ -312,7 +312,7 @@ class Bank :
             
         instance.EMI = EMI
         instance.job = job
-        instacne.max_loan_amt = max_loan_amt
+        instance.max_loan_amt = max_loan_amt
         instance.update()
         
 def opt(custObj):
