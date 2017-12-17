@@ -1,11 +1,12 @@
-'''Module to perform basic Banking operations '''
+'''Module to perform basic Banking operations
+Project by - Abhishek , Tarun , Vasudha, Atharva , Shubhayu
+Final Version
+                                                            '''
 
 import time,pickle,os
 
 path0 = "Data\\"
 process = True        
-
-
 
 class Customer :
     no_of_customers = 0
@@ -140,47 +141,58 @@ class Bank :
 
     @staticmethod
     def menu(instance) :
+        global process
         
         while True:
             print "  "
             print Bank.txt
             print Bank.txtcont
 
-            
-            prompt = int(raw_input("Enter Option : "))
-            if prompt ==1 :
-                instance.ViewData()                
-            elif prompt == 2 :
-                amt = float(raw_input(Bank.prompt1))
-                instance.Withdraw(amt)
-            elif prompt == 3 :
-                amt1 = float(raw_input(Bank.prompt2))
-                instance.Deposit(amt1)
-            elif prompt == 4:
-                print "Available Amount : " , instance.amount
-            elif prompt == 5 :
-                instance.ChangeData()
-            elif prompt == 6:
-                                
-                tcash = float(raw_input("Enter amount to be transferred :"))
-                sname = raw_input("Enter name of the receiver : ")                
-                Bank.TransferCash(instance,sname,tcash)
+            try:
+                prompt = int(raw_input("Enter Option : "))
+                if prompt ==1 :
+                    instance.ViewData()                
+                elif prompt == 2 :
+                    amt = float(raw_input(Bank.prompt1))
+                    instance.Withdraw(amt)
+                elif prompt == 3 :
+                    amt1 = float(raw_input(Bank.prompt2))
+                    instance.Deposit(amt1)
+                elif prompt == 4:
+                    print "Available Amount : " , instance.amount
+                elif prompt == 5 :
+                    instance.ChangeData()
+                elif prompt == 6:
+                                    
+                    tcash = float(raw_input("Enter amount to be transferred :"))
+                    sname = raw_input("Enter name of the receiver : ")                
+                    Bank.TransferCash(instance,sname,tcash)
 
-            elif prompt == 7 :
-                print "Entering loan menu....."
-                Bank.loan(instance)
+                elif prompt == 7 :
+                    print "...."
+                    time.sleep(1)
+                    print "Entering loan menu....."
+                    Bank.loan(instance)
 
-            elif prompt == 8 :
-                print "Our bank currently provides everyone an interest rate of 8% per annum "
-                print "Your interest for the current amount inn the bank @8 % per annum : ",self.amount * 0.08
-                print " " 
-                
-            elif prompt == 9:
-                instance.update()
-                break
-                exit()
-
-            
+                elif prompt == 8 :
+                    print "Our bank currently provides everyone an interest rate of 8% per annum "
+                    print "You are eligible to deposit an amount lesser than your account balance\nElse you are to deposit extra amount.\nIt is under non-refundable branch.\nWhich means it cannot be withdraw for minimum one year"
+                    try:
+                        dep = int(raw_input("Enter amount under interest rate :"))
+                    except:
+                        print "Error - Please enter a valid amount"
+                        print "Session expired, Start from beginning "
+                    print "Your interest for the current amount inn the bank @8 % per annum, That is your maturity amount is:",dep + (dep*0.08)
+                    print "So after one year the above amount will be added to your bank account"
+                    print " " 
+                    
+                elif prompt == 9:
+                    instance.update()
+                    process = False
+                    break
+                    exit()
+            except:
+                print"Invalid choice"
 
     @staticmethod
     def TransferCash(sendobj,name,cash):
@@ -203,77 +215,81 @@ class Bank :
     
         Loantype = None
         print"1-Personal Loan\n2-House Loan"
-        opt = int(raw_input("Enter preferred option :"))
-        if opt not in range(1,3):
-            print "Invalid Selection"
-            Bank.loan()                                                  #enter the arguement as object
+        try:
+            opt = int(raw_input("Enter preferred option :"))
+            if opt not in range(1,3):
+                print "Invalid Selection"
+                Bank.loan(instance)                                                  #enter the arguement as object
 
-        elif opt == 1:
-            print "You have opted for personal loan"
-            Loantype = "personal"
-            instance.loantype = Loantype
-            age = int(raw_input("Enter your age :"))
-            annual_income = int(raw_input("Enter your annual income (deducting tax) :"))
-            job = str(raw_input("Enter the sector you work in (Government or Private) :"))
-            if job.lower() == "government":
-                max_loan_amt = (annual_income*5)+(0.3*annual_income)
-                print "You are eligible for a loan amount of",max_loan_amt
-            elif job.lower() == "private":
-                max_loan_amt = (annual_income*5)+(0.2*annual_income)
-                print "You are eligible for a loan amount of",max_loan_amt
+            elif opt == 1:
+                print "You have opted for personal loan"
+                Loantype = "personal"
+                instance.loantype = Loantype
+                age = int(raw_input("Enter your age :"))
+                annual_income = int(raw_input("Enter your annual income (deducting tax) :"))
+                job = str(raw_input("Enter the sector you work in (Government or Private) :"))
+                if job.lower() == "government":
+                    max_loan_amt = (annual_income*5)+(0.3*annual_income)
+                    print "You are eligible for a loan amount of",max_loan_amt
+                elif job.lower() == "private":
+                    max_loan_amt = (annual_income*5)+(0.2*annual_income)
+                    print "You are eligible for a loan amount of",max_loan_amt
 
-            req = int(raw_input("Are you in the requirement of the complete loan amount(choose - 1)or do you want to reduce it(choose - 2) :"))
-            if req == 1:
-                print "Now you have choosen the loan scheme for an amount",max_loan_amt
-                Bank.time_repay_personal(job,max_loan_amt,instance)
-                
-
-            elif req == 2:
-                print "Enter the preferred loan amount"
-                print "Lesser than ",max_loan_amt
-                loan_req = int(raw_input("Enter the amount :"))
-                if loan_req <= max_loan_amt:
-                    max_loan_amt = loan_req
-                    print "Loan amount acceptable\nYou have choosen the loan scheme for an amount",max_loan_amt
+                req = int(raw_input("Are you in the requirement of the complete loan amount(choose - 1)or do you want to reduce it(choose - 2) :"))
+                if req == 1:
+                    print "Now you have choosen the loan scheme for an amount",max_loan_amt
                     Bank.time_repay_personal(job,max_loan_amt,instance)
-                else:
-                    print "Loan amount greater than maximum loan amount allowed"
-            else:
-                print "invalid selection,session cancelled"
-                Bank.loan()
-        elif opt == 2:
-            Loantype = "House"
-            instance.loantype = Loantype
-            print "You have opted for House loan"
-            age = int(raw_input("Enter your age :"))
-            annual_income = int(raw_input("Enter your annual income (deducting tax) :"))
-            job = str(raw_input("Enter the sector you work in (Government or Private) :"))
-            if job.lower() == "government":
-                max_loan_amt = (annual_income*10)+(0.325*annual_income)
-                print "You are eligible for a loan amount of",max_loan_amt
-            elif job.lower() == "private":
-                max_loan_amt = (annual_income*10)+(0.285*annual_income)
-                print "You are eligible for a loan amount of",max_loan_amt
-
-            req = int(raw_input("Are you in the requirement of the complete loan amount(choose - 1)or do you want to reduce it(choose - 2) :"))
-            if req == 1:
-                print "Now you have choosen the loan scheme for an amount",max_loan_amt
-                Bank.time_repay_house(job,max_loan_amt,instance)
-            
-                
-
-            elif req == 2:
-                print "Enter the preferred loan amount"
-                print "Lesser than ",max_loan_amt
-                loan_req = int(raw_input("Enter the amount :"))
-                if loan_req <= max_loan_amt:
-                    max_loan_amt = loan_req
-                    print "Loan amount acceptable\nYou have choosen the loan scheme for an amount",max_loan_amt
-                    Bank.time_repay_house(job,max_loan_amt,instance)
-                else:
-                    print "Loan amount greater than maximum loan amount allowed"
-
                     
+
+                elif req == 2:
+                    print "Enter the preferred loan amount"
+                    print "Lesser than ",max_loan_amt
+                    loan_req = int(raw_input("Enter the amount :"))
+                    if loan_req <= max_loan_amt:
+                        max_loan_amt = loan_req
+                        print "Loan amount acceptable\nYou have choosen the loan scheme for an amount",max_loan_amt
+                        Bank.time_repay_personal(job,max_loan_amt,instance)
+                    else:
+                        print "Loan amount greater than maximum loan amount allowed"
+                        Bank.loan()
+                else:
+                    print "invalid selection,session cancelled"
+                    Bank.loan()
+            elif opt == 2:
+                Loantype = "House"
+                instance.loantype = Loantype
+                print "You have opted for House loan"
+                age = int(raw_input("Enter your age :"))
+                annual_income = int(raw_input("Enter your annual income (deducting tax) :"))
+                job = str(raw_input("Enter the sector you work in (Government or Private) :"))
+                if job.lower() == "government":
+                    max_loan_amt = (annual_income*10)+(0.325*annual_income)
+                    print "You are eligible for a loan amount of",max_loan_amt
+                elif job.lower() == "private":
+                    max_loan_amt = (annual_income*10)+(0.285*annual_income)
+                    print "You are eligible for a loan amount of",max_loan_amt
+
+                req = int(raw_input("Are you in the requirement of the complete loan amount(choose - 1)or do you want to reduce it(choose - 2) :"))
+                if req == 1:
+                    print "Now you have choosen the loan scheme for an amount",max_loan_amt
+                    Bank.time_repay_house(job,max_loan_amt,instance)
+                
+                    
+
+                elif req == 2:
+                    print "Enter the preferred loan amount"
+                    print "Lesser than ",max_loan_amt
+                    loan_req = int(raw_input("Enter the amount :"))
+                    if loan_req <= max_loan_amt:
+                        max_loan_amt = loan_req
+                        print "Loan amount acceptable\nYou have choosen the loan scheme for an amount",max_loan_amt
+                        Bank.time_repay_house(job,max_loan_amt,instance)
+                    else:
+                        print "Loan amount greater than maximum loan amount allowed"
+           
+        except:
+            print"Invalid choice"
+            Bank.loan(instance)
        
     @staticmethod             
     def time_repay_personal(job,max_loan_amt,instance):
@@ -315,15 +331,21 @@ class Bank :
         instance.max_loan_amt = max_loan_amt
         instance.update()
         
+        
 def opt(custObj):
     global process
-    option = int(raw_input("Enter 1 to enter menu or 0 to exit : "))
-    if option == 1 :
-        Bank.menu(custObj)
-    elif option == 0 :
-        process  =False
-    else :
-        print "Invalid option try again "
+    try:
+        option = int(raw_input("Enter 1 to enter menu or 0 to exit : "))
+        if option == 1 :
+            Bank.menu(custObj)
+        elif option == 0 :
+            process  =False
+            
+        else :
+            print "Invalid option try again "
+            opt(custObj)
+    except:
+        print "Invalid choice"
         opt(custObj)
 
         
@@ -335,21 +357,20 @@ def LoginPage():
     txt =  '''Select 1 - Existing account,
 Select 2 - Create new account
 Select 3 - Exit : '''
-    try : 
+    try:
         x = int(raw_input(txt))
 
         if x == 1 :
             SignIn()
-        if x == 2 :
+        elif x == 2 :
             SignUp()
-        if x == 3 :
+        elif x == 3 :
             process = False
-            
-
-    except :
-        print "Error - Invalid"
-        
-        LoginPage()
+        elif x not in range(1,4):
+            print "Invalid choice"
+    except:
+        print"Invalid choice" 
+               
 
 def transferData(obj):
     path = 'Data\\' + obj.Name
@@ -373,15 +394,17 @@ def dateError(date) :
     elif int(date[6:10]) not in range(1940,2001):
         print "Not in age limit"
         SignUp()
-    elif date == " ":
+    elif len(str(date)) == 0:
         print "Date can't be blank"
         SignUp()
+    elif len(str(date)) < 10:
+        print "Invalid date - length"
+        SignUp()
+    
     else:
         pass
 
-    
 def emailError(email) :
-    #q = ajsdfgasjdf
     q1 = (email[-4:-1] + email[len(email)-1])
     q2 =(email[-3:-1] + email[len(email)-1])
     if '@' not in email :
@@ -413,13 +436,20 @@ def phoneError(phone) :
     if len(phone) != 10:
         print "Invalid Phone Number len"
         SignUp()
-
+def ageError(Age):
+    if len(str(Age)) == 0:
+        print "Please enter a valid age"
+    elif int(Age) not in range(18,70):
+        print "Age limit - not satisfied"
+    
+    else:
+        pass
     
     
     
 def SignUp() :
-    
-    print "\\ Create New Account //"
+    print "" 
+    print "\\\ Create New Account ///"
     Data = []
     obj = Customer()
     
@@ -427,10 +457,19 @@ def SignUp() :
     if len(Username) == 0:
         print "Username can't be blank"
         SignUp()
+    elif len(Username) < 6:
+        print "Minimum username length is 6"
+        SignUp()
         
     Password = raw_input("Enter your Password : ")
     if len(Password) == 0:
         print "Password can't be blank"
+        SignUp()
+    elif len(Password) < 6:
+        print "Minimum password length is 6"
+        SignUp()
+    elif Password == Username :
+        print "Username and password cannot be same "
         SignUp()
     RePassword = raw_input("Re-Enter your Password : ")
         
@@ -441,10 +480,10 @@ def SignUp() :
         SignUp()
                 
     Address = raw_input("Enter your current address : ")
-    if Address == " ":
+    if len(Address) == 0:
         print "Address can't be blank"
         SignUp()
-    
+
     DOB = raw_input("Enter Date of Birth (DD/MM/YYYY) : ")
     dateError(DOB)
     
@@ -455,11 +494,8 @@ def SignUp() :
     
         
     Age = raw_input("Enter your age : ")
-    if int(Age) not in range(18,77):
-        print "Invalid age"
-        SignUp()
-        
-
+    ageError(Age)
+    
    
     Data.append(Username)
     Data.append(Password)
@@ -473,13 +509,8 @@ def SignUp() :
     transferData(obj)
     print ""
 
-    print " SignUp complete " 
-    
-
-
-
-#def errorCheck():
-    
+    print "SignUp complete " 
+        
     
 def SignIn():
 
@@ -522,6 +553,3 @@ def SignIn():
 #main        
 while process: 
     LoginPage()
-    
-    
-            
