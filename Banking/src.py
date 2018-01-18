@@ -383,67 +383,79 @@ def dateError(date) :
     #DD/MM/YYYY
     if date[2] != "/" or date[5] != "/":
         print "Date not in correct format"
-        SignUp()
+        return True
+    
     elif int(date[0:2]) not in range(1,32):
         print "Wrong Date Type "
-        SignUp()
+        return True
+
     elif int(date[3:5]) not in range(1,13):
         print "Wrong Date Type"
-        SignUp()
+        return True
 
     elif int(date[6:10]) not in range(1940,2001):
         print "Not in age limit"
-        SignUp()
+        return True
+
     elif len(str(date)) == 0:
         print "Date can't be blank"
-        SignUp()
+        return True
+
     elif len(str(date)) < 10:
         print "Invalid date - length"
-        SignUp()
+        return True
     
     else:
-        pass
+        return False
 
 def emailError(email) :
     q1 = (email[-4:-1] + email[len(email)-1])
     q2 =(email[-3:-1] + email[len(email)-1])
     if '@' not in email :
         print "Invalid email ID  "
-        SignUp()
-
+        return True
+        
     elif q1 != ".com" and q2 != ".in" :
         
         
         print "Invalid email ID "
-        SignUp()
+        return True
 
    
     elif len(email) == 0   :
         print "Invalid email ID "
-        SignUp()
+        return True
 
         
     else :
-        pass
+        return False
         
     
 def phoneError(phone) :
     for i in phone :
         if int(i) not in range(0,10):
             print "Invalid phone number1"
-            SignUp()
+            
             break
+            return  True
+        
     if len(phone) != 10:
         print "Invalid Phone Number len"
-        SignUp()
+        return True
+
+    else:
+        return False
+    
 def ageError(Age):
     if len(str(Age)) == 0:
         print "Please enter a valid age"
+        return True
     elif int(Age) not in range(18,70):
         print "Age limit - not satisfied"
+        return True
     
     else:
-        pass
+        return False
     
     
     
@@ -455,22 +467,33 @@ def SignUp() :
     
     Username  = raw_input("Enter your Username(cannot be changed) : ")
     if len(Username) == 0:
+
         print "Username can't be blank"
         SignUp()
+
+        return
+        
     elif len(Username) < 6:
         print "Minimum username length is 6"
         SignUp()
+        return
         
     Password = raw_input("Enter your Password : ")
     if len(Password) == 0:
         print "Password can't be blank"
         SignUp()
+        return
+    
     elif len(Password) < 6:
         print "Minimum password length is 6"
         SignUp()
+        return
+    
     elif Password == Username :
         print "Username and password cannot be same "
         SignUp()
+        return
+    
     RePassword = raw_input("Re-Enter your Password : ")
         
     if Password != RePassword :
@@ -478,23 +501,35 @@ def SignUp() :
         print "Passwords do not match "
         print " "
         SignUp()
+        return
+        
                 
     Address = raw_input("Enter your current address : ")
     if len(Address) == 0:
         print "Address can't be blank"
         SignUp()
+        return
 
     DOB = raw_input("Enter Date of Birth (DD/MM/YYYY) : ")
-    dateError(DOB)
+    if dateError(DOB) == True :
+        SignUp()
+        return
     
     Email = raw_input("Enter a valid Email ID : ")
-    emailError(Email)
+    if emailError(Email) == True :
+        SignUp()
+        return
+
     Phno = raw_input("Enter your Phone number : ")
-    phoneError(Phno)
+    if phoneError(Phno) == True :
+        SignUp()
+        return
     
         
     Age = raw_input("Enter your age : ")
-    ageError(Age)
+    if ageError(Age) == True :
+        SignUp()
+        return
     
    
     Data.append(Username)
