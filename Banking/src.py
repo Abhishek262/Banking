@@ -1,6 +1,5 @@
 '''Module to perform basic Banking operations
-Project by - Abhishek , Tarun , Vasudha, Atharva , Shubhayu
-Final Version
+
                                                             '''
 
 import time,pickle,os
