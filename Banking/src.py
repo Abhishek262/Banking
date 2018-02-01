@@ -23,7 +23,7 @@ class Customer :
         self.Phno = None
         self.info = None
         self.amount = 0
-        
+        #variables related to loan 
         self.EMI = None    
         self.job = None
         self.max_loan_amt = None
@@ -375,6 +375,7 @@ def transferData(obj):
     path = 'Data\\' + obj.Name
     f = file(path, 'wb')
     
+
     pickle.dump(obj,f)
     f.close()
 
@@ -557,10 +558,26 @@ def SignUp() :
     
 def SignIn():
 
-    print "Sign in to your account "
+    print "Sign in to your account (press 0 to exit)"
     print ""
     Username = raw_input("Enter your username  : ")
+    
+    if Username == '0' :
+        print "Exiting..."
+        print " "
+        LoginPage()
+
+        return
+    
     Password = raw_input("Enter your Password : ")
+
+    if Password == '0' :
+        print "Exiting..."
+        print " "
+        LoginPage()
+
+        return
+    
     print " Logging in .  "
     print ""
     time.sleep(1)
@@ -578,7 +595,8 @@ def SignIn():
 
         if Username == custObj.Name and Password == custObj.Password:
             print "Logged in "
-            
+
+        
         else :
             print " Invalid Username/Password "
             SignIn()
