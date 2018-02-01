@@ -356,19 +356,19 @@ def LoginPage():
     txt =  '''Select 1 - Existing account,
 Select 2 - Create new account
 Select 3 - Exit : '''
-    try:
-        x = int(raw_input(txt))
+    
 
-        if x == 1 :
-            SignIn()
-        elif x == 2 :
-            SignUp()
-        elif x == 3 :
-            process = False
-        elif x not in range(1,4):
-            print "Invalid choice"
-    except:
-        print"Invalid choice" 
+    x = int(raw_input(txt))
+
+    if x == 1 :
+        SignIn()
+    elif x == 2 :
+        SignUp()
+    elif x == 3 :
+        process = False
+    elif x not in range(1,4):
+        print "Invalid choice"
+
                
 
 def transferData(obj):
@@ -380,32 +380,41 @@ def transferData(obj):
 
 def dateError(date) :
     #DD/MM/YYYY
-    if date[2] != "/" or date[5] != "/":
-        print "Date not in correct format"
-        return True
-    
-    elif int(date[0:2]) not in range(1,32):
-        print "Wrong Date Type "
-        return True
 
-    elif int(date[3:5]) not in range(1,13):
-        print "Wrong Date Type"
-        return True
+    try : 
+        if date[2] != "/" or date[5] != "/":
+            print "Date not in correct format"
+            return True
+        
+        elif int(date[0:2]) not in range(1,32):
+            print "Wrong Date Type "
+            return True
 
-    elif int(date[6:10]) not in range(1940,2001):
-        print "Not in age limit"
-        return True
+        elif int(date[3:5]) not in range(1,13):
+            print "Wrong Date Type"
+            return True
 
-    elif len(str(date)) == 0:
-        print "Date can't be blank"
-        return True
+        elif int(date[6:10]) not in range(1940,2001):
+            print "Not in age limit"
+            return True
 
-    elif len(str(date)) < 10:
-        print "Invalid date - length"
+        elif len(str(date)) == 0:
+            print "Date can't be blank"
+            return True
+
+        elif len(str(date)) < 10:
+            print "Invalid date - length"
+            return True
+        
+        else:
+            return False
+
+    except TypeError :
+        print "Wrong Date Value"
         return True
-    
-    else:
-        return False
+    except IndexError :
+        print "Wrong Date Value "
+        return True
 
 def emailError(email) :
     q1 = (email[-4:-1] + email[len(email)-1])
