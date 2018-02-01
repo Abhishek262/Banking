@@ -1,8 +1,8 @@
 '''Module to perform basic Banking operations
 
                                                             '''
+import time,os,pickle
 
-import time,pickle,os
 
 path0 = "Data\\"
 process = True        
@@ -187,9 +187,9 @@ class Bank :
                     
                 elif prompt == 9:
                     instance.update()
-                    process = False
+                    
                     break
-                    exit()
+                    LoginPage()
             except:
                 print"Invalid choice"
 
@@ -357,16 +357,20 @@ def LoginPage():
 Select 2 - Create new account
 Select 3 - Exit : '''
     
-
-    x = int(raw_input(txt))
-
+    try: 
+        x = int(raw_input(txt))
+    except ValueError :
+        print "Invalid option"
+        LoginPage()
+        return
+    
     if x == 1 :
         SignIn()
     elif x == 2 :
         SignUp()
     elif x == 3 :
         process = False
-    elif x not in range(1,4):
+    else: 
         print "Invalid choice"
 
                
@@ -378,6 +382,29 @@ def transferData(obj):
 
     pickle.dump(obj,f)
     f.close()
+
+def UserEF(cust1):
+    #checks whether cutomer objects are being overriden
+    path = 'Data\\'
+    try:
+        
+        foo = open(path + cust1,'rb')
+    except IOError :
+        return False
+
+
+    tempuser = pickle.load(foo)
+
+    
+    if cust1 == tempuser.Name :
+        print " Username already taken, try a different one."
+        foo.close()
+        return True
+    else :
+        foo.close()
+        return False
+
+    
 
 def dateError(date) :
     #DD/MM/YYYY
@@ -475,8 +502,13 @@ def SignUp() :
     obj = Customer()
     
     Username  = raw_input("Enter your Username(cannot be changed) : ")
-    if len(Username) == 0:
+    
 
+    if UserEF(Username) == True :
+        SignUp()
+        return
+    elif len(Username) == 0:
+        
         print "Username can't be blank"
         SignUp()
 
@@ -486,6 +518,7 @@ def SignUp() :
         print "Minimum username length is 6"
         SignUp()
         return
+    
         
     Password = raw_input("Enter your Password : ")
     if len(Password) == 0:
