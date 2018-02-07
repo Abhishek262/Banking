@@ -86,14 +86,22 @@ class Customer :
                 print "Password Successfully changed. It is: " , self.Password
             else :
                 print "Passwords do not match.Try again"
-                self.Changepass()
+
+        else :
+            print "Passwords do not match..."
     
     
 
     def ChangeData(self):
         print "What do you want to change? "
         print "0.Exit \n 1.Password \n 2.Address \n 3.DOB \n 4.Email \n 5.Phone number"
-        prompt = int(raw_input("Enter option: " ))
+        try : 
+            prompt = int(raw_input("Enter option: " ))
+
+        except ValueError :
+            print " Enter a valid option"
+            self.ChangeData()
+            return
 
         if prompt == 0 :
             pass
@@ -106,19 +114,27 @@ class Customer :
             self.Address = add
             print "Changed Address is ",self.Address
         elif prompt == 3 :
-            db= raw_input("Enter new Date of birth : ")
-            self.DOB = db
-            print "The date of birth has been changed to ",self.DOB
+            db= raw_input("Enter new Date of birth(DD/MM/YYYY) : ")
+            if dateError(db) == False : 
+                self.DOB = db
+                print "The date of birth has been changed to ",self.DOB
+            else :
+                print " Try again"
+                
         elif prompt ==4 :
             em= raw_input("Enter new Email ID : ")
-            self.Email = em
-            print "The Email ID has been changed to ",self.Email
+            if emailError(em) == False : 
+                self.Email = em
+                print "The Email ID has been changed to ",self.Email
+
+            else :
+                print "Try again" 
         elif prompt == 5:
             ph= raw_input("Enter new phone number : ")
             self.Phno = ph
             print "The phone number has been changed to ",self.Phno
         else:
-            print "Provide a valid option "
+            print "Enter a valid option "
 
     def update(self):
         path = "Data\\"
@@ -127,7 +143,8 @@ class Customer :
         pickle.dump(self,Foo)
         Foo.close()
         
-        
+
+                
 #contains mostly static methods        
 class Bank :
     txt  = "Banking Operations  \n 1.View Details \n 2.Withdraw \n 3.Deposit \n 4.View Amount \n 5.Change Credentials \n 6.Transfer Capital \n 7.Loan  "
