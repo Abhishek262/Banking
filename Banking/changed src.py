@@ -501,12 +501,17 @@ def phoneError(phone) :
     else:
         return False
     
-def ageError(Age):
+def ageError(Age,DOB):
+    v = 2018 - int(DOB[6:10]) 
+    
     if len(str(Age)) == 0:
         print "Please enter a valid age"
         return True
     elif int(Age) not in range(18,70):
         print "Age limit - not satisfied"
+        return True
+    elif int(Age) not in range(v-1,v+2):
+        print "Date of birth and age dont match"
         return True
     
     else:
@@ -588,7 +593,7 @@ def SignUp() :
     
         
     Age = raw_input("Enter your age : ")
-    if ageError(Age) == True :
+    if ageError(Age,DOB) == True :
         SignUp()
         return
     
