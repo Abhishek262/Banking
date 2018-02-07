@@ -1,5 +1,4 @@
 '''Module to perform basic Banking operations
-
                                                             '''
 import time,os,pickle
 
@@ -70,6 +69,7 @@ class Customer :
             print "EMI for loan: ",self.EMI
             print "Job Sector : ",self.job
             print "Current loan amount :  ",self.max_loan_amt
+            print "Loan duration of 15 years"
             print " " 
 
             
@@ -225,6 +225,11 @@ class Bank :
                 Loantype = "personal"
                 instance.loantype = Loantype
                 age = int(raw_input("Enter your age :"))
+                if age not in range(18,70):
+                    print "Age limit not met"
+                    print "Redirecting to beginning"
+                    Bank.loan(instance)
+                    return
                 annual_income = int(raw_input("Enter your annual income (deducting tax) :"))
                 job = str(raw_input("Enter the sector you work in (Government or Private) :"))
                 if job.lower() == "government":
@@ -233,6 +238,7 @@ class Bank :
                 elif job.lower() == "private":
                     max_loan_amt = (annual_income*5)+(0.2*annual_income)
                     print "You are eligible for a loan amount of",max_loan_amt
+                
 
                 req = int(raw_input("Are you in the requirement of the complete loan amount(choose - 1)or do you want to reduce it(choose - 2) :"))
                 if req == 1:
@@ -259,6 +265,11 @@ class Bank :
                 instance.loantype = Loantype
                 print "You have opted for House loan"
                 age = int(raw_input("Enter your age :"))
+                if age not in range(18,70):
+                    print "Age limit not met"
+                    print "Redirecting to beginning"
+                    Bank.loan(instance)
+                    return
                 annual_income = int(raw_input("Enter your annual income (deducting tax) :"))
                 job = str(raw_input("Enter the sector you work in (Government or Private) :"))
                 if job.lower() == "government":
@@ -267,6 +278,14 @@ class Bank :
                 elif job.lower() == "private":
                     max_loan_amt = (annual_income*10)+(0.285*annual_income)
                     print "You are eligible for a loan amount of",max_loan_amt
+                else:
+                    print".",
+                    time.sleep(1)
+                    print ".."
+                    time.sleep(1)
+                    print "Invalid choice, Redirecting to beginning"
+                    Bank.loan(instance)
+                    return
 
                 req = int(raw_input("Are you in the requirement of the complete loan amount(choose - 1)or do you want to reduce it(choose - 2) :"))
                 if req == 1:
@@ -294,17 +313,17 @@ class Bank :
     def time_repay_personal(job,max_loan_amt,instance):
         print "Now you have chosen your loan amount\nNow to decide the time period of the loan"
         if job.lower() == "private" or instance.age>35:
-            print "The time period of the loan will be over a period of 5 years"
+            print "The time period of the loan will be over a period of 15 years"
             total_amount_repay = (max_loan_amt) + (max_loan_amt)*0.75
             EMI = (total_amount_repay)/500
-            print "Your monthly installment value will be",EMI
+            print "Your monthly installment value will be",EMI*5
         elif job.lower() == " government" or instance.age<35:
-            print "The time period of the loan will be over a period of 8 years"
+            print "The time period of the loan will be over a period of 15 years"
             total_amount_repay = (max_loan_amt)+(max_loan_amt)*0.50
             EMI = (total_amount_repay)/800
-            print "Your monthly installment will be",EMI
+            print "Your monthly installment will be",EMI*5
             
-        instance.EMI = EMI
+        instance.EMI = EMI*5
         instance.job = job
         instance.max_loan_amt = max_loan_amt
         instance.update()
@@ -318,14 +337,14 @@ class Bank :
             print "The time period of the loan will be over a period of 15 years"
             total_amount_repay = (max_loan_amt) + (max_loan_amt)*0.75
             EMI = (total_amount_repay)/565
-            print "Your monthly installment value will be",EMI
+            print "Your monthly installment value will be",EMI*5
         elif job.lower() == " government" or instance.age<35:
-            print "The time period of the loan will be over a period of 18 years"
+            print "The time period of the loan will be over a period of 15 years"
             total_amount_repay = (max_loan_amt)+(max_loan_amt)*0.50
             EMI = (total_amount_repay)/550
-            print "Your monthly installment will be",EMI
+            print "Your monthly installment will be",EMI*5
             
-        instance.EMI = EMI
+        instance.EMI = EMI*5
         instance.job = job
         instance.max_loan_amt = max_loan_amt
         instance.update()
@@ -482,12 +501,17 @@ def phoneError(phone) :
     else:
         return False
     
-def ageError(Age):
+def ageError(Age,DOB):
+    v = 2018 - int(DOB[6:10]) 
+    
     if len(str(Age)) == 0:
         print "Please enter a valid age"
         return True
     elif int(Age) not in range(18,70):
         print "Age limit - not satisfied"
+        return True
+    elif int(Age) not in range(v-1,v+2):
+        print "Date of birth and age dont match"
         return True
     
     else:
@@ -569,7 +593,7 @@ def SignUp() :
     
         
     Age = raw_input("Enter your age : ")
-    if ageError(Age) == True :
+    if ageError(Age,DOB) == True :
         SignUp()
         return
     
@@ -647,5 +671,3 @@ def SignIn():
 #main        
 while process: 
     LoginPage()
-
-    
