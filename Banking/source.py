@@ -483,11 +483,13 @@ def dateError(date) :
 def emailError(email) :
     q1 = (email[-4:-1] + email[len(email)-1])
     q2 =(email[-3:-1] + email[len(email)-1])
+    q3 =(email[-5:-1] + email[len(email)-1])
+
     if '@' not in email :
         print "Invalid email ID  "
         return True
         
-    elif q1 != ".com" and q2 != ".in" :
+    elif q1 != ".com" and q2 != ".in" and q3 != ".mail" :
         
         
         print "Invalid email ID "
